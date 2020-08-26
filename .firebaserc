@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "kolkoikrzyzykpwa": {
+      "hosting": {
+        "TicTacToePWA": [
+          "kolkoikrzyzykpwa"
+        ]
+      }
+    }
+  }
+}
