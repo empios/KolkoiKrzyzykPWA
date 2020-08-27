@@ -10,6 +10,9 @@ export class BoardComponent implements OnInit {
   squares: any[];
   xIsNext: boolean;
   winner: string;
+  ai: string;
+  human: string;
+  scores: {};
 
   constructor() {
   }
@@ -22,12 +25,16 @@ export class BoardComponent implements OnInit {
     this.squares = Array(9).fill(null);
     this.winner = null;
     this.xIsNext = true;
+    this.ai = "X";
+    this.human = "O"
+
   }
 
   get player() {
-    return this.xIsNext ? 'X' : 'O';
+    return this.xIsNext ? 'O' : 'X';
   }
 
+  //Człowiek
   makeMove(idx: number) {
     if (!this.squares[idx]) {
       this.squares.splice(idx, 1, this.player);
@@ -35,6 +42,86 @@ export class BoardComponent implements OnInit {
     }
     this.winner = this.calculateWinner();
   }
+
+
+
+  minimax(board, depth, isMaximazing){
+    this.scores = {
+        'X': 1,
+        'O': -1,
+        'Remis': 0
+    }
+    let result = this.calculateWinner();
+    if(result !== null){
+      let score = this.scores[result];
+      return score;
+    }
+    if(isMaximazing){
+      let bestScore = -Infinity;
+      for(let i=0;i<9;i++){
+        //Czy jest wolne miejsce?
+        if(this.squares[i] == null){
+          this.squares[i] = this.ai;
+          let score = this.minimax(this.squares, depth+1, false);
+          this.squares[i] = null;
+          bestScore = Math.max(score, bestScore);
+        }
+      }   
+      return bestScore;
+    }
+    else{
+      let bestScore = Infinity;
+      for(let i=0;i<9;i++){
+        //Czy jest wolne miejsce?
+        if(this.squares[i] == null){
+          this.squares[i] = this.human;
+          let score = this.minimax(this.squares, depth+1, true);
+          this.squares[i] = null;
+          bestScore = Math.min(score, bestScore); 
+        }
+      }   
+      return bestScore;
+    }
+  }
+
+  //SI
+  bestMove(){
+    let bestScore = -Infinity;
+    let move;
+    for(let i=0;i<9;i++){
+      //Czy jest wolne miejsce?
+
+      if(this.squares[i] == null){
+        this.squares[i] = this.ai;
+        let score = this.minimax(this.squares, 0, false);
+        this.squares[i] = null;
+        if(score>bestScore){
+          bestScore = score;
+          move = i;
+        }        
+      }
+
+    }
+    this.squares.splice(move, 1, this.ai)
+  }
+
+
+  makeMoveAI(idx: number) {
+    if (!this.squares[idx]) {
+      this.squares.splice(idx, 1, this.human);
+      this.xIsNext = !this.xIsNext;
+    }
+    this.winner = this.calculateWinner();
+    this.bestMove()
+    this.xIsNext = !this.xIsNext;
+    this.winner = this.calculateWinner();
+
+  }
+
+
+
+
+
 
   calculateWinner() {
     const lines = [
@@ -56,6 +143,10 @@ export class BoardComponent implements OnInit {
       ) {
         return this.squares[a];
       }
+      else if(this.squares.includes(null) == false && this.winner == null){
+        return "Remis";
+      }
+      
     }
     return null;
   }
