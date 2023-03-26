@@ -66,7 +66,7 @@ export class BoardComponent implements OnInit {
           this.squares[i] = null;
           bestScore = Math.max(score, bestScore);
         }
-      }   
+      }
       return bestScore;
     }
     else{
@@ -77,9 +77,9 @@ export class BoardComponent implements OnInit {
           this.squares[i] = this.human;
           let score = this.minimax(this.squares, depth+1, true);
           this.squares[i] = null;
-          bestScore = Math.min(score, bestScore); 
+          bestScore = Math.min(score, bestScore);
         }
-      }   
+      }
       return bestScore;
     }
   }
@@ -90,24 +90,22 @@ export class BoardComponent implements OnInit {
     let move;
     for(let i=0;i<9;i++){
       //Czy jest wolne miejsce?
-
-      if(this.squares[i] == null){
+      if(this.squares[i] === null){
         this.squares[i] = this.ai;
         let score = this.minimax(this.squares, 0, false);
         this.squares[i] = null;
         if(score>bestScore){
           bestScore = score;
           move = i;
-        }        
+        }
       }
-
     }
     this.squares.splice(move, 1, this.ai)
   }
 
 
   makeMoveAI(idx: number) {
-    if (!this.squares[idx]) {
+    if (!this.squares[idx] || idx < 9) {
       this.squares.splice(idx, 1, this.human);
       this.xIsNext = !this.xIsNext;
     }
@@ -115,7 +113,6 @@ export class BoardComponent implements OnInit {
     this.bestMove()
     this.xIsNext = !this.xIsNext;
     this.winner = this.calculateWinner();
-
   }
 
 
@@ -143,10 +140,10 @@ export class BoardComponent implements OnInit {
       ) {
         return this.squares[a];
       }
-      else if(this.squares.includes(null) == false && this.winner == null){
+      else if(this.squares.filter(e => e == null).length <= 1 && this.winner == null){
         return "Remis";
       }
-      
+
     }
     return null;
   }

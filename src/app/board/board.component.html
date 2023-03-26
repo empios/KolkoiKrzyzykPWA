@@ -1,15 +1,16 @@
 
-<h2>Pokonaj zaawansowaną Sztuczną inteligencję w Kółko i krzyżyk!</h2>
+<h2 style="margin-top: 10px">Pokonaj zaawansowaną Sztuczną inteligencję w Kółko i krzyżyk!</h2>
 <button nbButton outline (click)="newGame()">Zagraj z komputerem</button>
-<h2 *ngIf="winner && winner !== 'Remis'">
+<h2 style="margin-top: 10px" *ngIf="winner && winner !== 'Remis'">
   Gracz {{winner}} wygrał!
 </h2>
-<h2 *ngIf="winner === 'Remis'">{{winner}}</h2>
+<h2 style="margin-top: 10px" *ngIf="winner === 'Remis'">{{winner}}</h2>
 
 <main class="item">
   <app-square *ngFor="let val of squares; let i= index"
-  [value]="val"
-  (click)="makeMoveAI(i)">
+              [disabled]="winner === 'Remis'"
+              [value]="val"
+              (click)="makeMoveAI(i)">
   </app-square>
 </main>
 
