@@ -1,6 +1,6 @@
 # Live wersja
 
-https://kolkoikrzyzykpwa.web.app/
+https://kolkoikrzyzykpwa.firebaseapp.com/
 
 # NODE
 v16.19.1 (npm v8.1.0)
